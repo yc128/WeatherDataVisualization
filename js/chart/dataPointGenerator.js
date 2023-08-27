@@ -14,10 +14,11 @@ function generateXDataPoint(chartTitle, isToday){
 function generateYDataPoint(chartTitle, isToday){
     switch (chartTitle) {
         case 'Rainfall':
-            return generateYDataPointForHourRainfall(chartTitle, isToday);
+            return generateYDataPointForHourRainfall(chartTitle, isToday).map(element => element / 10);
 
         case 'AtmosphericPressure':
         case 'Temperature':
+        case 'WindSpeed':
             return generateYDataPointForLineChart(chartTitle, isToday).map(element => element / 10);
 
         default:

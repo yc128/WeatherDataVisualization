@@ -6,5 +6,6 @@ const chartNameColumnNameDict = {
     'AtmosphericPressure': '气压',
     'WindSpeed': '分钟风速',
     'WindDirection': '分钟风向',
-    'Rainfall': '小时雨量'
+    'Rainfall': '小时雨量',
+    'RainfallDay': '日雨量'
 }

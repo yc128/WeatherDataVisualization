@@ -1,0 +1,18 @@
+{
+  "dbConfig": {
+    "server": "localhost",
+    "port": 1433,
+    "authentication": {
+      "options": {
+        "userName": "nodejsapp",
+        "password": "114514"
+      }
+    },
+    "options": {
+      "encrypt": false,
+      "database": "fsxy001",
+      "trustServerCertificate": true
+    }
+  },
+  "serverPort": 3000
+}

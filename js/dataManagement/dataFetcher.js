@@ -1,4 +1,12 @@
-const updateTimeInterval = 1000*60*2 //millisecond
+
+const updateTimeInterval = 1000 * 30 //millisecond
+let serverIP = 'localhostdddd';
+let port = '30003';
+
+
+// Read and parse the config.json file
+serverIP = dataFetcherConfig.serverIP;
+port = dataFetcherConfig.serverPort;
 
 var dateOfLatestData = '0';
 var dateOfOldestData = '0';
@@ -7,20 +15,25 @@ var dbData;
 
 
 async function fetchData() {
-    const response = await fetch('http://localhost:3000/api/getData');
+    const response = await fetch(`http://${serverIP}:${port}/api/getData`);
     dbData = await response.json();
     console.log('data fetched');
     dateOfLatestData = dbData[dbData.length-1][DATE_TIME_COLUMN];
-    dateOfOldestData = dbData[0][DATE_TIME_COLUMN]
+    dateOfOldestData = dbData[0][DATE_TIME_COLUMN];
     console.log('date range: '+dateOfOldestData+" - "+dateOfLatestData);
     sendDbData();
 }
 
 async function updateData() {
-    const response = await fetch(`/api/getUpdate?value=${dateOfLatestData}`);
-    const result = await response.json();
+    const response = await fetch(`http://${serverIP}:${port}/api/getUpdate?value=${dateOfLatestData}`);
+    var result = await response.json();
+    console.log(result);
     console.log("Size before update: "+dbData.length);
-    dbData.concat(result);
+    result.forEach(singleData => {
+        dbData.push(singleData);
+    })
+    dateOfLatestData = dbData[dbData.length - 1][DATE_TIME_COLUMN];
+    dateOfOldestData = dbData[0][DATE_TIME_COLUMN];
     console.log("Size after update: "+dbData.length);
 }
 

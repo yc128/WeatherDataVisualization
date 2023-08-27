@@ -13,7 +13,7 @@ switch (chartType){
         generateSingleChart('\u6C14\u538B', 'hPa', 'scatter', 'lineChart', 'AtmosphericPressure') // Using UTF-8 code for "气压"
         break;
     case 'WindSpeed':
-        generateSingleChart('\u98CE\u901F', 'km/h', 'scatter', 'lineChart', 'WindSpeed') // Using UTF-8 code for "风速"
+        generateSingleChart('\u98CE\u901F', 'm/s', 'scatter', 'lineChart', 'WindSpeed') // Using UTF-8 code for "风速"
         break;
     case 'WindDirection':
         generateSingleChart('\u98CE\u5411', '\u00B0', 'scatter', 'lineChart', 'WindDirection') // Using UTF-8 code for "风向"

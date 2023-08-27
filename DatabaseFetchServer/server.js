@@ -8,7 +8,7 @@ var formattedDateYesterday = undefined;
 var usingTestDate = false;
 
 //=====================Config=================
-const port = 3000; // Choose a port number
+let port = 3000; // Choose a port number
 //===========================================
 
 
@@ -19,10 +19,10 @@ const port = 3000; // Choose a port number
 
 
 // Read and parse the config.json file
-const configPath = './db-config.json';
+const configPath = './server-config.json';
 const rawConfig = fs.readFileSync(configPath);
-const config = JSON.parse(rawConfig);
-
+const config = JSON.parse(rawConfig).dbConfig;
+port = JSON.parse(rawConfig).serverPort;
 
 
 
@@ -33,6 +33,7 @@ app.use(cors());
 
 // Handle requests
 app.get('/api/getData', async (req, res) => {
+    console.log("getdata...");
 
     //date setting
     const today = new Date();

@@ -19,13 +19,15 @@ function updateTableData(){
     }
     let latestData = dbData[dbData.length-1];
     let latestDataRow = [];
-    latestDataRow.push(latestData[DATE_TIME_COLUMN]);
+    latestDataRow.push(convertToDateStr(latestData[DATE_TIME_COLUMN]));
     latestDataRow.push(parseInt(latestData[chartNameColumnNameDict['Temperature']]) / 10 + "\u00B0C");
     latestDataRow.push(latestData[chartNameColumnNameDict['Humidity']] + "%");
     latestDataRow.push(parseInt(latestData[chartNameColumnNameDict['AtmosphericPressure']]) / 10 + "hPa");
-    latestDataRow.push(latestData[chartNameColumnNameDict['WindSpeed']] + "km/h");
+    latestDataRow.push(latestData[chartNameColumnNameDict['WindSpeed']] / 10 + "m/s");
     latestDataRow.push(latestData[chartNameColumnNameDict['WindDirection']] + "\u00B0");
-    latestDataRow.push(latestData[chartNameColumnNameDict['Rainfall']] + "mm");
+    latestDataRow.push(latestData[chartNameColumnNameDict['Rainfall']] / 10 + "mm");
+    latestDataRow.push(latestData[chartNameColumnNameDict['RainfallDay']] / 10 + "mm");
+
 
 
     rowData.push(latestDataRow);
@@ -43,5 +45,19 @@ function updateTableData(){
 
         tableBody.appendChild(tableRow);
     });
+}
+
+
+//Convert string format 'YYYYMMDDHHMMSS into standard date object in js'
+function convertToDateStr(dateString) {
+    const year = dateString.slice(0, 4);
+    const month = dateString.slice(4, 6);
+    const day = dateString.slice(6, 8);
+    const hour = dateString.slice(8, 10);
+    const minute = dateString.slice(10, 12);
+    const second = dateString.slice(12, 14);
+
+    return "" + year + "/" + month + "/" + day + " " +
+        hour + ":" + minute + ":" +second;
 }
 
