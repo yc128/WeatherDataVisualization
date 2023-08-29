@@ -1,4 +1,6 @@
 
+var globalYMax = 1;
+
 
 /**
  * This function generate single chart once the data processing complete, Which is if isDrawable is true.
@@ -19,7 +21,7 @@ function generateSingleChart(chartTitle, yUnit, chartType, chartDiv, dataId){
                 const data = dataGenerator(chartTitle, chartType, dataId);
 
                 maxMinMark(layout, data);
-                setXAxisRange(layout, data);
+                setAxisRange(layout, data);
 
                 Plotly.newPlot(chartDiv, data, layout);
 
@@ -138,6 +140,10 @@ function maxMinMark(layout, data){
             annotationColor = todayLineColor;
         }
 
+        if(trace.y[maxIndex] > globalYMax){
+            globalYMax = trace.y[maxIndex];
+        }
+
 
         layout['annotations'].push(
             //max
@@ -166,7 +172,7 @@ function maxMinMark(layout, data){
 }
 
 
-function setXAxisRange(layout, data){
+function setAxisRange(layout, data){
    const currentDate = data[0].x[0];
    const startTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
 
@@ -175,6 +181,7 @@ function setXAxisRange(layout, data){
     const endTime = new Date(nextDay.getFullYear(), nextDay.getMonth(), nextDay.getDate());
 
     layout.xaxis.range = [startTime, endTime];
+    layout.yaxis.range = [0, globalYMax];
 
 }
 
