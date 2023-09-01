@@ -1,0 +1,28 @@
+
+/* Style for the table */
+table {
+    border-collapse: collapse;
+    width: 100%; /* Make the table width match the screen width */
+    border: 1px solid black; /* Add border to the table */
+    background-color: rgba(36, 195, 253, 0.26);
+    alignment: center;
+    justify-content: center;
+}
+
+
+/* Style for table headers */
+th {
+    font-weight: bold;
+    font-size: 24px;
+    border: 1px solid black; /* Add border to table headers */
+    padding: 8px; /* Add padding to improve readability */
+}
+
+/* Style for table cells */
+td {
+    font-weight: bold;
+    font-size: 24px;
+    border: 1px solid black; /* Add border to table cells */
+    padding: 8px; /* Add padding to improve readability */
+    text-align: center;
+}

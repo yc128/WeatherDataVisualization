@@ -16,7 +16,9 @@ function generateSingleChart(chartTitle, yUnit, chartType, chartDiv, dataId){
 
     return new Promise((resolve) => {
         function tryToGenerate() {
-            if (isDrawable) {
+            if (dbData !== undefined/*isDrawable*/) {
+                rawData = dbData;
+                sortDataByDate();
                 const layout = layoutGenerator(chartTitle, yUnit);
                 const data = dataGenerator(chartTitle, chartType, dataId);
 
@@ -27,7 +29,7 @@ function generateSingleChart(chartTitle, yUnit, chartType, chartDiv, dataId){
 
                 resolve(); // Resolve the Promise to signal completion
             } else {
-                setTimeout(tryToGenerate, 5); // Poll every 100ms
+                setTimeout(tryToGenerate, 5); // Poll every
             }
         }
 
@@ -101,15 +103,13 @@ function layoutGenerator(chartTitle, yUnit){
             font: titleFont
         },
         width: (window.innerWidth * 0.98)/chartNumberEachRow,
+        height: (window.innerHeight * 0.83)/chartNumberEachColumn,
         yaxis: {
             title: chartTitle+' ('+yUnit+')'
         },
         ...chartUniLayout,
     }
 
-    if(isSingleChart === true){
-        layout['height'] = (window.innerHeight * 0.95);
-    }
     return layout;
 }
 
@@ -123,6 +123,7 @@ function layoutGenerator(chartTitle, yUnit){
  */
 function maxMinMark(layout, data){
     var traceCounter = 0;
+    globalYMax = 0;
     data.forEach(function(trace) {
         var maxIndex = trace.y.indexOf(Math.max(...trace.y));
         var minIndex = trace.y.indexOf(Math.min(...trace.y));
@@ -181,7 +182,7 @@ function setAxisRange(layout, data){
     const endTime = new Date(nextDay.getFullYear(), nextDay.getMonth(), nextDay.getDate());
 
     layout.xaxis.range = [startTime, endTime];
-    layout.yaxis.range = [0, globalYMax];
+    // layout.yaxis.range = [0, globalYMax*1.2];
 
 }
 

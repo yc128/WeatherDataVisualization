@@ -1,39 +1,16 @@
 var prevValue = 0;
-var formattedDateYesterday = undefined;
-var formattedDateToday = undefined;
-var formattedDateTomorrow = undefined;
 var rawData = undefined;
 
 var dataForToday = [];
 var dataForYesterday = [];
 
-var usingTestDate = false;
 
 
 
-//====================Config==========
-const dataUpdatingInterval = 1000*45; //millisecond
-//===========================================
 
+// var isDrawable = false;
 
-//**********************TEMP FOR TESTING***********
-// usingTestDate = true;
-// formattedDateYesterday = '20230810000000';
-// formattedDateToday = '20230811000000';
-// formattedDateTomorrow = '20230812000000';
-//*************************************************
-
-
-
-var isDrawable = false;
-
-//Listener for receiving data from data fetcher, which will be passed to dataHandler for data precessing.
-window.addEventListener('message', function (event) {
-    rawData = event.data;
-    sortDataByDate();
-    isDrawable = true;
-});
-
+rawData = dbData;
 
 /**
  * generate random x data. For testing

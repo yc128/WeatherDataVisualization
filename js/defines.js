@@ -9,3 +9,7 @@ const chartNameColumnNameDict = {
     'Rainfall': '小时雨量',
     'RainfallDay': '日雨量'
 }
+
+var chartNumberEachRow = 3;
+var chartNumberEachColumn = 2;
+var isSingleChart = false;

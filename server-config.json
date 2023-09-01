@@ -14,5 +14,6 @@
       "trustServerCertificate": true
     }
   },
-  "serverPort": 3000
+  "serverPort": 3000,
+  "tableName": "fsxy0001"
 }

@@ -3,49 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        /* Style the iframe to fill the entire viewport */
-        iframe {
-            position: fixed;
-            top: 10%;
-            left: 0;
-            width: 100%;
-            height: 90%;
-            border: none; /* Optional: Remove iframe border */
-        }
 
-        /* Style for the table */
-        table {
-            border-collapse: collapse;
-            width: 100%; /* Make the table width match the screen width */
-            border: 1px solid black; /* Add border to the table */
-            background-color: rgba(36, 195, 253, 0.26);
-            alignment: center;
-            justify-content: center;
-        }
-
-
-        /* Style for table headers */
-        th {
-            font-weight: bold;
-            font-size: 24px;
-            border: 1px solid black; /* Add border to table headers */
-            padding: 8px; /* Add padding to improve readability */
-        }
-
-        /* Style for table cells */
-        td {
-            font-weight: bold;
-            font-size: 24px;
-            border: 1px solid black; /* Add border to table cells */
-            padding: 8px; /* Add padding to improve readability */
-            text-align: center;
-        }
-
-        body {
-            background-color: rgb(191, 198, 250);
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-table.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 
 
@@ -76,9 +37,35 @@
 
 <script type="text/javascript" src="js/tableController.js"></script>
 
+<div id = "singleChart" class="chart color1"></div>
 
-<iframe id="contentFrame" src="six_charts.html"></iframe>
+<!--<div class="chart-container">-->
+<!--    -->
+<!--</div>-->
+<div class="chart-row">
+    <div id = "lineChart" class="chart color1"></div>
+    <div id = "lineChart2" class="chart color2"></div>
+    <div id = "lineChart3" class="chart color1"></div>
+</div>
+<br>
+<div class="chart-row">
+    <div id = "lineChart4" class="chart color2"></div>
+    <div id = "lineChart5" class="chart color1"></div>
+    <div id = "lineChart6" class="chart color2"></div>
+</div>
 
+<script type="text/javascript" src=js/dataManagement/dataHandler.js></script>
+<script type="text/javascript" src=js/chart/dataPointGenerator.js></script>
+<script type="text/javascript" src=js/chart/chartProperty.js></script>
+<script type="text/javascript" src=js/chart/chartController.js></script>
+<script type="text/javascript" src=js/six_charts.js></script>
+<script type="text/javascript" src=js/single_chart.js></script>
 <script type="text/javascript" src=js/frame_page.js></script>
+
+
+
+<!--<iframe id="contentFrame" src="six_charts.html"></iframe>-->
+
+<!--<script type="text/javascript" src=js/frame_page.js></script>-->
 </body>
 </html>

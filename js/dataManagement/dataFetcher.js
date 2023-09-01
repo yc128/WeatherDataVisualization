@@ -21,7 +21,6 @@ async function fetchData() {
     dateOfLatestData = dbData[dbData.length-1][DATE_TIME_COLUMN];
     dateOfOldestData = dbData[0][DATE_TIME_COLUMN];
     console.log('date range: '+dateOfOldestData+" - "+dateOfLatestData);
-    sendDbData();
 }
 
 async function updateData() {
@@ -55,13 +54,6 @@ function generateTodayDate(){
         (today.getMonth() + 1).toString().padStart(2, '0') +
         today.getDate().toString().padStart(2, '0') +
         '000000'; // HHMMSS is set to zero
-}
-
-
-//Send dbData to script in iframe
-function sendDbData(){
-    const iframe = document.getElementById("contentFrame");
-    iframe.contentWindow.postMessage(dbData, '*');
 }
 
 

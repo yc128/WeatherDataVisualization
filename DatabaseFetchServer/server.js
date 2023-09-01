@@ -7,14 +7,10 @@ const app = express();
 var formattedDateYesterday = undefined;
 var usingTestDate = false;
 
-//=====================Config=================
-let port = 3000; // Choose a port number
-//===========================================
-
 
 //**********************TEMP FOR TESTING***********
-// usingTestDate = true;
-// formattedDateYesterday = '20230803000000'
+usingTestDate = true;
+formattedDateYesterday = '20230803000000'
 //*************************************************
 
 
@@ -22,7 +18,8 @@ let port = 3000; // Choose a port number
 const configPath = './server-config.json';
 const rawConfig = fs.readFileSync(configPath);
 const config = JSON.parse(rawConfig).dbConfig;
-port = JSON.parse(rawConfig).serverPort;
+const port = JSON.parse(rawConfig).serverPort;
+const tableName = JSON.parse(rawConfig).tableName;
 
 
 
@@ -47,7 +44,7 @@ app.get('/api/getData', async (req, res) => {
             '000000'; // HHMMSS is set to zero
     }
 
-    const sqlCommand = `SELECT * FROM fsxy0001 WHERE 日期时间 > ` + formattedDateYesterday + ` ORDER BY 日期时间`;
+    const sqlCommand = `SELECT * FROM ` + tableName + ` WHERE 日期时间 > ` + formattedDateYesterday + ` ORDER BY 日期时间`;
     try {
         const result = await executeQuery(sqlCommand);
         res.json(result.recordset);
@@ -61,7 +58,7 @@ app.get('/api/getUpdate', async (req, res) => {
     const updateValue = req.query.value; // Retrieve the value from the query string
     console.log("Update data later than: "+ updateValue);
     //Generate SQL command string
-    const sqlCommand = `SELECT * FROM fsxy0001 WHERE 日期时间 > ` + updateValue + ` ORDER BY 日期时间`;
+    const sqlCommand = `SELECT * FROM ` + tableName + ` WHERE 日期时间 > ` + updateValue + ` ORDER BY 日期时间`;
     try {
         const result = await executeQuery(sqlCommand);
         res.json(result.recordset);

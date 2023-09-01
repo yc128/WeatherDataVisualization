@@ -1,51 +1,55 @@
+
+// Set the time interval for switching (ms)
+var switchInterval = 12 * 1000;
+
 var currentPage = 'SixCharts'
 
 // Function to switch between pages in the iframe
 function switchPages() {
-    var currentSrc = document.getElementById('contentFrame').src;
 
 
     switch (currentPage) {
         case 'SixCharts':
-            changeSingleChart('Temperature');
+            changeChart('Temperature');
             break;
         case 'Temperature':
-            changeSingleChart('Humidity');
+            changeChart('Humidity');
             break;
         case 'Humidity':
-            changeSingleChart('AtmosphericPressure');
+            changeChart('AtmosphericPressure');
             break;
         case 'AtmosphericPressure':
-            changeSingleChart('WindSpeed');
+            changeChart('WindSpeed');
             break;
         case 'WindSpeed':
-            changeSingleChart('WindDirection');
+            changeChart('WindDirection');
             break;
         case 'WindDirection':
-            changeSingleChart('Rainfall');
+            changeChart('Rainfall');
+            break;
+        case 'RainFall':
+            changeChart('SixCharts');
             break;
         default:
-            document.getElementById('contentFrame').contentWindow.location.href = 'six_charts.html';
-            currentPage = 'SixCharts';
+            changeChart('SixCharts');
     }
-
-    var iframe = document.getElementById('contentFrame'); // Use the correct iframe ID
-    iframe.addEventListener('load', function () {
-        // Wait for the iframe's content to fully load
-        sendDbData();
-    });
 
 }
 
 
-function changeSingleChart(chartName){
-    document.getElementById('contentFrame').contentWindow.location.href = ('single_chart.html?chart=' + chartName);
+function changeChart(chartName){
+    if(chartName === 'SixCharts'){
+        createSixChartsOnHTML();
+    }else{
+        createSingleChartOnHTML(chartName);
+    }
+
     currentPage = chartName;
 }
 
 
-// Set the time interval for switching (ms)
-var switchInterval = 12000;
 
+
+changeChart('SixCharts');
 // Call the switchPages function repeatedly at the specified time interval
 setInterval(switchPages, switchInterval);

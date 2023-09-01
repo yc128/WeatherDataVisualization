@@ -51,7 +51,7 @@ const chartUniLayout = {
 
 const titleFont = {
     family: 'Arial, sans-serif', // Specify the font family
-    size: 28, // Specify the font size for the title
+    size: 20, // Specify the font size for the title
     color: '#000000', // Specify the font color for the title
     bold: true // Make the y-axis title bold
 }
