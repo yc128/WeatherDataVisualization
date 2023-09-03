@@ -1,6 +1,4 @@
 
-// Set the time interval for switching (ms)
-var switchInterval = 12 * 1000;
 
 var currentPage = 'SixCharts'
 

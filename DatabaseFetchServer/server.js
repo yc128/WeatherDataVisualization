@@ -8,9 +8,17 @@ var formattedDateYesterday = undefined;
 var usingTestDate = false;
 
 
+//Cache data
+var cacheData = undefined;
+var cacheDataTimestamp = undefined;
+
+var cacheUpdateData = undefined;
+var cacheUpdateDataTimestamp = undefined;
+
+
 //**********************TEMP FOR TESTING***********
-usingTestDate = true;
-formattedDateYesterday = '20230803000000'
+// usingTestDate = true;
+// formattedDateYesterday = '20230803000000'
 //*************************************************
 
 
@@ -28,7 +36,10 @@ const tableName = JSON.parse(rawConfig).tableName;
 // Use the cors middleware to enable CORS
 app.use(cors());
 
-// Handle requests
+/**
+ * Handle get data requests from the web
+ * query and return recent two day's data (today's and yesterday's)
+ */
 app.get('/api/getData', async (req, res) => {
     console.log("getdata...");
 
@@ -46,22 +57,43 @@ app.get('/api/getData', async (req, res) => {
 
     const sqlCommand = `SELECT * FROM ` + tableName + ` WHERE 日期时间 > ` + formattedDateYesterday + ` ORDER BY 日期时间`;
     try {
-        const result = await executeQuery(sqlCommand);
-        res.json(result.recordset);
+        //Cache the data to avoid redundant database queries.
+        if(cacheData !== undefined &&
+            cacheDataTimestamp === formattedDateYesterday){
+            console.log("returning cache data, timestamp: "+cacheDataTimestamp);
+            res.json(cacheData.recordset);
+        }else{
+            const result = await executeQuery(sqlCommand);
+            cacheData = result;
+            cacheDataTimestamp = formattedDateYesterday;
+            res.json(result.recordset);
+        }
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-
+/**
+ * query and return data later than given date.
+ */
 app.get('/api/getUpdate', async (req, res) => {
     const updateValue = req.query.value; // Retrieve the value from the query string
     console.log("Update data later than: "+ updateValue);
     //Generate SQL command string
     const sqlCommand = `SELECT * FROM ` + tableName + ` WHERE 日期时间 > ` + updateValue + ` ORDER BY 日期时间`;
     try {
-        const result = await executeQuery(sqlCommand);
-        res.json(result.recordset);
+        //Cache the data to avoid redundant database queries.
+        if(cacheUpdateData !== undefined &&
+        cacheUpdateDataTimestamp === updateValue){
+            console.log("returning cache update data, timestamp: "+cacheUpdateDataTimestamp);
+            res.json(cacheUpdateData.recordset);
+        }else{
+            const result = await executeQuery(sqlCommand);
+            cacheUpdateData = result;
+            cacheUpdateDataTimestamp = updateValue;
+            res.json(result.recordset);
+        }
+
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
@@ -80,7 +112,15 @@ async function executeQuery(query) {
         console.log("Executing database query...")
         const result = await pool.request().query(query);
         console.log("Query Completed. \nResult:\n");
-        console.log(result.recordset);
+        if(result.recordset !== undefined && result.recordset.length > 0){
+            console.log("First data: \n");
+            console.log(result.recordset[0]);
+            console.log("Last data: \n");
+            console.log(result.recordset[result.recordset.length-1]);
+        }else{
+            console.log("empty");
+        }
+
         return result;
     } catch (error) {
         console.error(error);

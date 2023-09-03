@@ -1,5 +1,4 @@
 
-const updateTimeInterval = 1000 * 30 //millisecond
 let serverIP = 'localhostdddd';
 let port = '30003';
 
