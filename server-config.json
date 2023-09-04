@@ -15,5 +15,6 @@
     }
   },
   "serverPort": 3000,
-  "tableName": "fsxy0001"
+  "tableName": "fsxy0001",
+  "updateDataInterval": 30000
 }

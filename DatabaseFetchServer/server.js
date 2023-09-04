@@ -28,13 +28,17 @@ const rawConfig = fs.readFileSync(configPath);
 const config = JSON.parse(rawConfig).dbConfig;
 const port = JSON.parse(rawConfig).serverPort;
 const tableName = JSON.parse(rawConfig).tableName;
-
+const updateDataInterval  = JSON.parse(rawConfig).updateDataInterval;
 
 
 //=========================End of Config==============
 
 // Use the cors middleware to enable CORS
 app.use(cors());
+
+setInterval(fetchUpdateDataFromDb, 5000);
+
+
 
 /**
  * Handle get data requests from the web
@@ -61,12 +65,12 @@ app.get('/api/getData', async (req, res) => {
         if(cacheData !== undefined &&
             cacheDataTimestamp === formattedDateYesterday){
             console.log("returning cache data, timestamp: "+cacheDataTimestamp);
-            res.json(cacheData.recordset);
+            res.json(cacheData);
         }else{
             const result = await executeQuery(sqlCommand);
-            cacheData = result;
+            cacheData = result.recordset;
             cacheDataTimestamp = formattedDateYesterday;
-            res.json(result.recordset);
+            res.json(cacheData);
         }
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
@@ -79,21 +83,15 @@ app.get('/api/getData', async (req, res) => {
 app.get('/api/getUpdate', async (req, res) => {
     const updateValue = req.query.value; // Retrieve the value from the query string
     console.log("Update data later than: "+ updateValue);
-    //Generate SQL command string
-    const sqlCommand = `SELECT * FROM ` + tableName + ` WHERE 日期时间 > ` + updateValue + ` ORDER BY 日期时间`;
-    try {
-        //Cache the data to avoid redundant database queries.
-        if(cacheUpdateData !== undefined &&
-        cacheUpdateDataTimestamp === updateValue){
-            console.log("returning cache update data, timestamp: "+cacheUpdateDataTimestamp);
-            res.json(cacheUpdateData.recordset);
-        }else{
-            const result = await executeQuery(sqlCommand);
-            cacheUpdateData = result;
-            cacheUpdateDataTimestamp = updateValue;
-            res.json(result.recordset);
-        }
 
+    try {
+        let responseDataSet = [];
+        cacheData.forEach(singleData => {
+            if(singleData['日期时间'] > updateValue){
+                responseDataSet.push(singleData);
+            }
+        })
+        res.json(responseDataSet);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
@@ -104,6 +102,43 @@ app.get('/api/getUpdate', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+
+/**
+ * Update the caching data
+ * @returns {Promise<void>}
+ */
+async function fetchUpdateDataFromDb(){
+    if(cacheData === undefined || cacheData.length < 1){
+        console.log("Cannot fetch update data from db");
+        return;
+    }
+
+    let updateValue = cacheData[cacheData.length - 1]['日期时间'];
+    console.log("Fetching update data from db... \n data later than "+updateValue);
+    const sqlCommand = `SELECT * FROM ` + tableName + ` WHERE 日期时间 > ` + updateValue + ` ORDER BY 日期时间`;
+    const result = await executeQuery(sqlCommand);
+    processUpdateResult(result);
+}
+
+
+/**
+ * Add updated result to cache data.
+ * @param result
+ */
+function processUpdateResult(result){
+    let resultSet = result.recordset;
+    if(resultSet === undefined ||
+        resultSet.length === 0 ||
+        cacheData === undefined){
+        return;
+    }
+
+    resultSet.forEach(singleData => {
+        cacheData.push(singleData);
+    })
+
+}
 
 
 async function executeQuery(query) {
