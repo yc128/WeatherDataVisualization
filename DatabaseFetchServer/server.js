@@ -17,8 +17,8 @@ var cacheUpdateDataTimestamp = undefined;
 
 
 //**********************TEMP FOR TESTING***********
-// usingTestDate = true;
-// formattedDateYesterday = '20230803000000'
+usingTestDate = true;
+formattedDateYesterday = '20230803000000'
 //*************************************************
 
 

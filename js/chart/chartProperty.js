@@ -32,6 +32,7 @@ const annotationStyle = {
 }
 // abs value for the y offset of annotation
 const absAy = 40;
+const absAyShort = 18;
 
 //The layout properties
 // x axis tick interval (step) (millisecond)

@@ -23,7 +23,7 @@ function generateSingleChart(chartTitle, yUnit, chartType, chartDiv, dataId){
                 const data = dataGenerator(chartTitle, chartType, dataId);
 
                 maxMinMark(layout, data);
-                setAxisRange(layout, data);
+                setAxisRange(layout, data, dataId);
 
                 Plotly.newPlot(chartDiv, data, layout);
 
@@ -145,6 +145,11 @@ function maxMinMark(layout, data){
             globalYMax = trace.y[maxIndex];
         }
 
+        let absAyCurr = absAy;
+        if(!isSingleChart){
+            absAyCurr = absAyShort;
+        }
+
 
         layout['annotations'].push(
             //max
@@ -153,7 +158,7 @@ function maxMinMark(layout, data){
                 y: trace.y[maxIndex],
                 text: trace.y[maxIndex],
                 bgcolor: annotationColor,
-                ay: -absAy,
+                ay: -absAyCurr,
                 ...annotationStyle
             },
             //min
@@ -162,7 +167,7 @@ function maxMinMark(layout, data){
                 y: trace.y[minIndex],
                 text: trace.y[minIndex],
                 bgcolor: annotationColor,
-                ay: absAy,
+                ay: absAyCurr,
                 ...annotationStyle
             }
         );
@@ -173,7 +178,7 @@ function maxMinMark(layout, data){
 }
 
 
-function setAxisRange(layout, data){
+function setAxisRange(layout, data, chartTitle){
    const currentDate = data[0].x[0];
    const startTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
 
@@ -182,7 +187,17 @@ function setAxisRange(layout, data){
     const endTime = new Date(nextDay.getFullYear(), nextDay.getMonth(), nextDay.getDate());
 
     layout.xaxis.range = [startTime, endTime];
-    // layout.yaxis.range = [0, globalYMax*1.2];
+
+    //Fix yAxis range for specific chart
+    console.log(chartTitle);
+    if(chartTitle === 'Humidity'){
+        console.log("h");
+        layout.yaxis.range = [0, 100];
+    }
+    if(chartTitle === 'WindDirection'){
+        console.log("w");
+        layout.yaxis.range = [0, 360];
+    }
 
 }
 
